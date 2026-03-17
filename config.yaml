@@ -1,0 +1,18 @@
+project:
+  name: "Jobs in Data Analysis"
+  version: "1.0.0"
+
+paths:
+  raw_data: "data/raw"
+  processed_data: "data/processed"
+  figures: "outputs/figures"
+  reports: "outputs/reports"
+
+data:
+  source: "kaggle"
+  dataset: "hummaamqaasim/jobs-in-data"
+
+analysis:
+  target_column: null  # Define based on problem
+  test_size: 0.2
+  random_state: 42

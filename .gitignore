@@ -1,0 +1,36 @@
+# Data
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Environment
+.env
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Outputs (optional - uncomment to ignore)
+# outputs/figures/*
+# outputs/reports/*
+
+# Power BI
+*.pbit           # Template files (optional)
+*.pbix.tmp       # Temp files
+dashboards/*.tmp
+
+# Note: .pbix files are included by default
+# Uncomment below to ignore (if file too large for git)
+# dashboards/*.pbix
