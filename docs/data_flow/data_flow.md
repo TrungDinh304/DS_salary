@@ -15,9 +15,16 @@ Tài liệu mô tả luồng dữ liệu từ source đến dashboard.
                           │                   │
                           ▼                   ▼
                     ┌─────────────┐     ┌─────────────┐
-                    │  EDA        │     │  Modeling   │
+                    │  Profiling  │     │  Modeling   │
+                    │ & Cleaning  │     │             │
                     │ (Notebook)  │     │  (src/)     │
                     └─────────────┘     └─────────────┘
+                          │                   
+                          ▼                  
+                    ┌─────────────┐
+                    │    EDA      │
+                    │ (Notebook)  │
+                    └─────────────┘
 ```
 
 ---
