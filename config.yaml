@@ -4,13 +4,22 @@ project:
 
 paths:
   raw_data: "data/raw"
-  processed_data: "data/processed"
+  dirty_data: "data/raw_dirty"
   figures: "outputs/figures"
   reports: "outputs/reports"
 
 data:
   source: "kaggle"
   dataset: "hummaamqaasim/jobs-in-data"
+  raw_filename: "jobs_in_data.csv"
+  dirty_filename: "jobs_in_data_dirty.csv"
+  dirty_seed: 42
+
+storage:
+  backend: "minio"
+  processed_prefix: "processed/jobs"
+  cleaned_object_csv: "processed/jobs/cleaned_data.csv"
+  cleaned_object_parquet: "processed/jobs/cleaned_data.parquet"
 
 analysis:
   target_column: null  # Define based on problem
