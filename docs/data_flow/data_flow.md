@@ -16,18 +16,20 @@ So với phiên bản đầu, flow đã được điều chỉnh ở 3 điểm:
 ┌─────────┐   ┌──────────┐   ┌──────────────┐   ┌──────────┐   ┌──────────┐   ┌──────────────┐   ┌──────────┐
 │ Kaggle  │──▶│ data/raw │──▶│ data/raw_    │──▶│ Cleaning │──▶│  MinIO   │──▶│ Transform →  │──▶│ Power BI │
 │         │   │          │   │  dirty/      │   │ (NB 01)  │   │ (bucket: │   │ Postgres DW  │   │ (DW)     │
-└─────────┘   └──────────┘   │ (artificial  │   └──────────┘   │ ds-salary)   │   (NB 02)    │   └──────────┘
+└─────────┘   └──────────┘   │ (artificial  │   └──────────┘   │ ds-salary)   │   (NB 03)    │   └──────────┘
                   │          │   noise)     │        │         └──────────┘   └──────────────┘
                   ▼          └──────────────┘        ▼                │              │
             ┌──────────┐            ▲                                 ▼              ▼
             │ Profiling│            │                          ┌──────────┐    ┌──────────┐
-            │ (NB 00,  │            │                          │ Modeling/│    │ etl_runs │
-            │  on dirty│     ┌──────────────┐                  │   EDA    │    │ (status, │
-            │  layer)  │     │   Dirtying   │                  │  (src/)  │    │  lineage)│
+            │ (NB 00,  │            │                          │   EDA    │    │ etl_runs │
+            │  on dirty│     ┌──────────────┐                  │ (NB 02 — │    │ (status, │
+            │  layer)  │     │   Dirtying   │                  │ query DW)│    │  lineage)│
             └──────────┘     │ (src/data/   │                  └──────────┘    └──────────┘
                              │  dirtify.py) │
                              └──────────────┘
 ```
+
+**Lưu ý NB 02 (EDA)**: chạy SAU NB 03 (transform) vì EDA query trực tiếp Postgres DW. Đặt số 02 phản ánh thứ tự ưu tiên đọc (analysis trước, infra-step transform sau) chứ không phải thứ tự execution.
 
 ---
 
@@ -99,6 +101,10 @@ So với phiên bản đầu, flow đã được điều chỉnh ở 3 điểm:
   | `status` | `running` / `success` / `failed` |
   | `started_at`, `completed_at`, `row_count`, `error_message` | telemetry |
 - **Idempotency rule**: trước khi nạp, `transform_to_dw` query `etl_runs` theo `(bucket, key, etag, status='success')`. Nếu match → skip. Nếu etag đã đổi (data mới) → tạo run mới, **xoá fact rows của các run trước cùng object_key** (qua `loaded_run_id`), rồi insert lại.
+- **Mark file processed = historical** (sau khi load thành công):
+  - Tag lên canonical object: `etl_status=loaded`, `etl_run_id`, `etl_loaded_at`, `etl_etag` — visible trên MinIO console / CLI / API.
+  - Snapshot bất biến copy sang `<dir>/historical/run_<id>_<timestamp>_<filename>` để giữ đúng bytes của lần load đó dù canonical bị overwrite ở lần cleaning sau.
+  - Canonical KHÔNG bị xoá → idempotency check etag vẫn hoạt động, dev có thể tải về kiểm tra.
 - Module: `src/warehouse/`
   - `db.py` — `get_pg_connection()`, `pg_connection()` context manager.
   - `geo_mapping.py` — country → (continent, region) static dict, fallback `("Other", "Other")`.
