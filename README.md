@@ -195,13 +195,15 @@ Từ [notebooks/03_EDA.ipynb](notebooks/03_EDA.ipynb) chạy trên DW (5,500 row
 ## 11. Visualization Ideas
 
 Xem [dashboards/Visualize idea.md](dashboards/Visualize%20idea.md) cho danh sách dashboard pages đề xuất: Overview, Salary deep-dive, Geography, Work setting, Decomposition Tree.
+- Dashboard:
+  ![](dashboards\Dashboard.png)
 
 ## 12. Roadmap
 
 - [x] Star schema + ETL + lineage
 - [x] EDA notebook (effect-size ranking)
 - [x] Object storage tag + historical archive
-- [ ] Power BI dashboard (in progress) — kết nối DW qua Npgsql
+- [x] Power BI dashboard (in progress) — kết nối DW qua Npgsql
 - [ ] Data enrichment: PPP-adjusted salary (World Bank), cost-of-living
 - [ ] Job-title normalization (collapse 125 titles → ~20 canonical families)
 - [ ] Salary prediction model (XGBoost + SHAP) → factor contribution display trong PBI
