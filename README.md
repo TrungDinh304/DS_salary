@@ -137,27 +137,7 @@ docker compose up -d
 
 ## 9. Star Schema (DW)
 
-```
-                           ┌────────────┐
-                           │ dim_date   │ (year)
-                           └────────────┘
-                                  │
-                                  ▼
-   dim_job ◀── dim_job_category  ─┤
-                                  │
-       dim_experience ────────────┤
-                                  │
-       dim_employment_type ───────┤
-                                  │
-       dim_work_setting ──────────┼──▶ fact_salary
-                                  │    (salary, salary_in_usd, loaded_run_id)
-       dim_company_size ──────────┤
-                                  │
-       dim_currency ──────────────┤
-                                  │
-       dim_location ──── dim_region ──── dim_continent
-       (used 2x: employee + company)
-```
+![](migrations\ERD.png)
 
 - 11 dimensions + 1 fact (`fact_salary`)
 - `fact_salary.loaded_run_id` → `etl_runs.run_id` (lineage)
