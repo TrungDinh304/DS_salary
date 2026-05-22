@@ -12,22 +12,7 @@ So với phiên bản đầu, flow đã được điều chỉnh ở 3 điểm:
 
 ## Data Flow Diagram
 
-```
-┌─────────┐   ┌──────────┐   ┌──────────────┐   ┌──────────┐   ┌──────────┐   ┌──────────────┐   ┌──────────┐
-│ Kaggle  │──▶│ data/raw │──▶│ data/raw_    │──▶│ Cleaning │──▶│  MinIO   │──▶│ Transform →  │──▶│ Power BI │
-│         │   │          │   │  dirty/      │   │ (NB 01)  │   │ (bucket: │   │ Postgres DW  │   │ (DW)     │
-└─────────┘   └──────────┘   │ (artificial  │   └──────────┘   │ ds-salary)   │   (NB 03)    │   └──────────┘
-                  │          │   noise)     │        │         └──────────┘   └──────────────┘
-                  ▼          └──────────────┘        ▼                │              │
-            ┌──────────┐            ▲                                 ▼              ▼
-            │ Profiling│            │                          ┌──────────┐    ┌──────────┐
-            │ (NB 00,  │            │                          │   EDA    │    │ etl_runs │
-            │  on dirty│     ┌──────────────┐                  │ (NB 02 — │    │ (status, │
-            │  layer)  │     │   Dirtying   │                  │ query DW)│    │  lineage)│
-            └──────────┘     │ (src/data/   │                  └──────────┘    └──────────┘
-                             │  dirtify.py) │
-                             └──────────────┘
-```
+  ![](.\dataflow.png)
 
 **Lưu ý NB 02 (EDA)**: chạy SAU NB 03 (transform) vì EDA query trực tiếp Postgres DW. Đặt số 02 phản ánh thứ tự ưu tiên đọc (analysis trước, infra-step transform sau) chứ không phải thứ tự execution.
 

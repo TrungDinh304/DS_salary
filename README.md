@@ -22,22 +22,7 @@ Xác định các yếu tố ảnh hưởng đến `salary_in_usd` trong ngành 
 
 ## 3. Architecture
 
-```
-┌─────────┐   ┌──────────┐   ┌──────────────┐   ┌──────────┐   ┌──────────┐   ┌──────────────┐      ┌──────────┐
-│ Kaggle  │──▶│ data/raw │──▶│ data/raw_    │──▶│ Cleaning │──▶│  MinIO   │──▶│ Transform →  │──▶│ Power BI │
-│         │   │          │   │  dirty/      │   │ (NB 01)  │   │ (bucket: │   │ Postgres DW  │      │ (DW)     │
-└─────────┘   └──────────┘   │ (artificial  │   └──────────┘   │ ds-salary)   │   (NB 03)    │      └──────────┘
-                  │          │   noise)     │                  └──────────┘   └──────────────┘
-                  ▼          └──────────────┘                         │              │
-            ┌──────────┐            ▲                                 ▼              ▼
-            │ Profiling│            │                          ┌──────────┐    ┌──────────┐
-            │ (NB 00,  │            │                          │   EDA    │    │ etl_runs │
-            │  on dirty│     ┌──────────────┐                  │ (NB 02 — │    │ (status, │
-            │  layer)  │     │   Dirtying   │                  │ query DW)│    │  lineage)│
-            └──────────┘     │ (src/data/   │                  └──────────┘    └──────────┘
-                             │  dirtify.py) │
-                             └──────────────┘
-```
+![](docs\data_flow\dataflow.png)
 
 | Layer | Path / Service | Vai trò |
 |---|---|---|
